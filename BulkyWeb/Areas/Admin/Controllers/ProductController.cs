@@ -1,0 +1,176 @@
+﻿using BulkyBook.DataAccess.Migrations;
+using BulkyBook.DataAccess.Repository.IRepository;
+using BulkyBook.DataAcess.Data;
+//using BulkyBook.Models;
+using BulkyBook.Models.Models;
+using BulkyBook.Models.ViewModels;
+using Microsoft.AspNetCore.Hosting;
+
+
+//using BulkyBookWeb.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Collections.Generic;
+using System.Runtime.ExceptionServices;
+
+namespace BulkyBookWeb.Areas.Admin.Controllers
+{
+    [Area("Admin")]
+    public class ProductController : Controller
+    {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
+        {
+            _unitOfWork = unitOfWork;
+            _webHostEnvironment = webHostEnvironment;
+        }
+        public IActionResult Index()
+        {
+            List<Product> objProductList = _unitOfWork.Product.GetAll().ToList();
+            return View(objProductList);
+        }
+
+        //For Create
+        public IActionResult Upsert(int? id)
+        {
+            //IEnumerable<SelectListItem> CategoryList = _unitOfWork.Category
+            //    .GetAll().Select(u => new SelectListItem
+            //    {
+            //        Text = u.Name,
+            //        Value = u.Id.ToString()
+            //    });
+
+            //ViewBag.CategoryList = CategoryList;
+            //ViewData["CategoryList"] = CategoryList;
+            ProductVM productVM = new()
+            {
+                CategoryList = _unitOfWork.Category.GetAll().Select(u => new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString()
+                }),
+                Product = new Product()
+            };
+            if (id == null || id == 0)
+            {
+                // Create
+                return View(productVM);
+            }
+            else
+            {
+                // Update
+                productVM.Product = _unitOfWork.Product.Get(u => u.Id == id);
+                return View(productVM);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Upsert(ProductVM productVM, IFormFile? file)
+        {
+            if (ModelState.IsValid)
+            {
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
+                if(file != null)
+                {
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    string productPath = Path.Combine(wwwRootPath, @"images\product");
+                    using (var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+
+                    productVM.Product.ImageUrl = @"\images\product" + fileName;
+                }
+                if (productVM.Product.Id == 0)
+                {
+                    _unitOfWork.Product.Add(productVM.Product);
+                }
+                else
+                {
+                    _unitOfWork.Product.Update(productVM.Product);
+                }
+                _unitOfWork.Save();
+                TempData["success"] = "Product created/successfully";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                productVM.CategoryList = _unitOfWork.Category.GetAll().Select(u => new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString()
+                });
+                return View(productVM);
+            }
+        }
+
+        ////For Edit
+        //public IActionResult Edit(int? id)
+        //{
+        //    if (id == null || id == 0)
+        //    {
+        //        return NotFound();
+        //    }
+        //    //First Technique
+        //    Product? productFormDb = _unitOfWork.Product.Get(u => u.Id == id);
+        //    //Second Technique for fency we can do it
+        //    //Product? categoryFormDb1 = _db.Categories.FirstOrDefault(u=>u.Id==id);
+        //    //Third Technique
+        //    //Product? categoryFormDb2 = _db.Categories.Where(u=>u.Id==id).FirstOrDefault();
+        //    if (productFormDb == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return View(productFormDb);
+        //}
+
+        //[HttpPost]
+        //public IActionResult Edit(Product obj)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _unitOfWork.Product.Update(obj);
+        //        _unitOfWork.Save();
+        //        TempData["success"] = "Product Updated successfully";
+        //        return RedirectToAction("Index");
+        //    }
+        //    return View(obj);
+        //}
+
+        //For Delete
+        public IActionResult Delete(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            //First Technique
+            Product? productFormDb = _unitOfWork.Product.Get(u => u.Id == id);
+            //Second Technique for fency we can do it
+            //Product? categoryFormDb1 = _db.Categories.FirstOrDefault(u=>u.Id==id);
+            //Third Technique
+            //Product? categoryFormDb2 = _db.Categories.Where(u=>u.Id==id).FirstOrDefault();
+            if (productFormDb == null)
+            {
+                return NotFound();
+            }
+            return View(productFormDb);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        public IActionResult DeletePost(int? id)
+        {
+            Product? obj = _unitOfWork.Product.Get(u => u.Id == id);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+            _unitOfWork.Product.Remove(obj);
+            _unitOfWork.Save();
+            TempData["success"] = "Product Deleted successfully";
+            return RedirectToAction("Index");
+        }
+    }
+}
