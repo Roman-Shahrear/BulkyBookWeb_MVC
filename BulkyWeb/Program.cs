@@ -1,12 +1,6 @@
-<<<<<<< HEAD
 using BulkyBook.DataAccess.Repository;
 using BulkyBook.DataAccess.Repository.IRepository;
 using BulkyBook.DataAcess.Data;
-=======
-using Bulky.DataAccess.Repository;
-using Bulky.DataAccess.Repository.IRepository;
-using Bulky.DataAcess.Data;
->>>>>>> ff020d72a70de9930dcff6a546e98ba02efb5e87
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,11 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options=>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-<<<<<<< HEAD
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-=======
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
->>>>>>> ff020d72a70de9930dcff6a546e98ba02efb5e87
 
 var app = builder.Build();
 
