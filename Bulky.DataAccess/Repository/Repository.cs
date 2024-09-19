@@ -1,11 +1,6 @@
 <<<<<<< HEAD
-<<<<<<< HEAD
 ﻿using BulkyBook.DataAccess.Repository.IRepository;
 using BulkyBook.DataAcess.Data;
-=======
-﻿using Bulky.DataAccess.Repository.IRepository;
-using Bulky.DataAcess.Data;
->>>>>>> ff020d72a70de9930dcff6a546e98ba02efb5e87
 =======
 ﻿using Bulky.DataAccess.Repository.IRepository;
 using Bulky.DataAcess.Data;
@@ -20,11 +15,7 @@ using System.Threading.Tasks;
 
 
 <<<<<<< HEAD
-<<<<<<< HEAD
 namespace BulkyBook.DataAccess.Repository
-=======
-namespace Bulky.DataAccess.Repository
->>>>>>> ff020d72a70de9930dcff6a546e98ba02efb5e87
 =======
 namespace Bulky.DataAccess.Repository
 >>>>>>> ff020d72a70de9930dcff6a546e98ba02efb5e87

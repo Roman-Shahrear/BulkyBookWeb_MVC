@@ -6,11 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 <<<<<<< HEAD
-<<<<<<< HEAD
 namespace BulkyBook.DataAccess.Repository.IRepository
-=======
-namespace Bulky.DataAccess.Repository.IRepository
->>>>>>> ff020d72a70de9930dcff6a546e98ba02efb5e87
 =======
 namespace Bulky.DataAccess.Repository.IRepository
 >>>>>>> ff020d72a70de9930dcff6a546e98ba02efb5e87

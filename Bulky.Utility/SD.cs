@@ -5,11 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 <<<<<<< HEAD
-<<<<<<< HEAD
 namespace BulkyBook.Utility
-=======
-namespace Bulky.Utility
->>>>>>> ff020d72a70de9930dcff6a546e98ba02efb5e87
 =======
 namespace Bulky.Utility
 >>>>>>> ff020d72a70de9930dcff6a546e98ba02efb5e87
