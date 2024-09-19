@@ -733,11 +733,15 @@ progress {
 }
 
     .blockquote-footer::before {
+<<<<<<< HEAD
 <<<<<<< HEAD:BulkyWeb/wwwroot/lib/bootstrap/dist/css/bootstrap.css
         content: "ï¿½ï¿½";
 =======
         content: "— ";
 >>>>>>> ff020d72a70de9930dcff6a546e98ba02efb5e87:BulkyWeb/wwwroot/lib/bootstrap/dist/css/bootsrap.css
+=======
+        content: "— ";
+>>>>>>> ff020d72a70de9930dcff6a546e98ba02efb5e87
     }
 
 .img-fluid {

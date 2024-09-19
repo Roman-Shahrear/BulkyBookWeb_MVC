@@ -5,7 +5,11 @@
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 namespace BulkyBook.DataAccess.Migrations
+=======
+namespace Bulky.DataAccess.Migrations
+>>>>>>> ff020d72a70de9930dcff6a546e98ba02efb5e87
 =======
 namespace Bulky.DataAccess.Migrations
 >>>>>>> ff020d72a70de9930dcff6a546e98ba02efb5e87

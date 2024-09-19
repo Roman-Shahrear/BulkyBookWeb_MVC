@@ -2,7 +2,11 @@
 using System.ComponentModel.DataAnnotations;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 namespace BulkyBook.Models
+=======
+namespace Bulky.Models
+>>>>>>> ff020d72a70de9930dcff6a546e98ba02efb5e87
 =======
 namespace Bulky.Models
 >>>>>>> ff020d72a70de9930dcff6a546e98ba02efb5e87

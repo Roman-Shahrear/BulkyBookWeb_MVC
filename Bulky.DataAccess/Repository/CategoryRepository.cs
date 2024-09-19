@@ -1,7 +1,13 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 ﻿using BulkyBook.DataAccess.Repository.IRepository;
 using BulkyBook.DataAcess.Data;
 using BulkyBook.Models;
+=======
+﻿using Bulky.DataAccess.Repository.IRepository;
+using Bulky.DataAcess.Data;
+using Bulky.Models;
+>>>>>>> ff020d72a70de9930dcff6a546e98ba02efb5e87
 =======
 ﻿using Bulky.DataAccess.Repository.IRepository;
 using Bulky.DataAcess.Data;
@@ -15,7 +21,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 namespace BulkyBook.DataAccess.Repository
+=======
+namespace Bulky.DataAccess.Repository
+>>>>>>> ff020d72a70de9930dcff6a546e98ba02efb5e87
 =======
 namespace Bulky.DataAccess.Repository
 >>>>>>> ff020d72a70de9930dcff6a546e98ba02efb5e87
@@ -29,12 +39,18 @@ namespace Bulky.DataAccess.Repository
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> ff020d72a70de9930dcff6a546e98ba02efb5e87
         public void Save()
         {
             _db.SaveChanges();
         }
 
+<<<<<<< HEAD
+>>>>>>> ff020d72a70de9930dcff6a546e98ba02efb5e87
+=======
 >>>>>>> ff020d72a70de9930dcff6a546e98ba02efb5e87
         public void Update(Category obj)
         {
