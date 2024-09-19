@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 ﻿using BulkyBook.DataAccess.Repository.IRepository;
 using BulkyBook.DataAcess.Data;
+=======
+﻿using Bulky.DataAccess.Repository.IRepository;
+using Bulky.DataAcess.Data;
+>>>>>>> ff020d72a70de9930dcff6a546e98ba02efb5e87
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,7 +14,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 
+<<<<<<< HEAD
 namespace BulkyBook.DataAccess.Repository
+=======
+namespace Bulky.DataAccess.Repository
+>>>>>>> ff020d72a70de9930dcff6a546e98ba02efb5e87
 {
     public class Repository<T> : IRepository<T> where T : class
     {

@@ -1,9 +1,17 @@
+<<<<<<< HEAD
 ﻿using BulkyBook.Models;
 using BulkyBook.Models.Models;
 using BulkyBookWeb.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BulkyBook.DataAcess.Data
+=======
+﻿using Bulky.Models;
+using BulkyWeb.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace Bulky.DataAcess.Data
+>>>>>>> ff020d72a70de9930dcff6a546e98ba02efb5e87
 {
     public class ApplicationDbContext : DbContext
     {
@@ -12,7 +20,10 @@ namespace BulkyBook.DataAcess.Data
             
         }
         public DbSet<Category> Categories { get; set; }
+<<<<<<< HEAD
         public DbSet<Product> Products { get; set; }
+=======
+>>>>>>> ff020d72a70de9930dcff6a546e98ba02efb5e87
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Category>().HasData(
@@ -20,6 +31,7 @@ namespace BulkyBook.DataAcess.Data
                 new Category { Id = 2, Name = "SciFi", DisplayOrder = 2 },
                 new Category { Id = 3, Name = "History", DisplayOrder = 3 }
                 );
+<<<<<<< HEAD
 
             modelBuilder.Entity<Product>().HasData(
                new Product
@@ -107,6 +119,8 @@ namespace BulkyBook.DataAcess.Data
                    ImageUrl = ""
                }
                );
+=======
+>>>>>>> ff020d72a70de9930dcff6a546e98ba02efb5e87
         }
     }
 }
