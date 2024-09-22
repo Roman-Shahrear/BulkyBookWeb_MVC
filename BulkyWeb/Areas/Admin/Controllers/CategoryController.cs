@@ -1,7 +1,9 @@
 ﻿using BulkyBook.DataAccess.Repository.IRepository;
 using BulkyBook.DataAcess.Data;
 using BulkyBook.Models;
+using BulkyBook.Utility;
 using BulkyBookWeb.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Runtime.ExceptionServices;
@@ -9,6 +11,7 @@ using System.Runtime.ExceptionServices;
 namespace BulkyBookWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.Role_Admin)]
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

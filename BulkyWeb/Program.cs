@@ -1,7 +1,11 @@
+using Microsoft.AspNetCore.Identity.UI.Services;
 using BulkyBook.DataAccess.Repository;
 using BulkyBook.DataAccess.Repository.IRepository;
 using BulkyBook.DataAcess.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using BulkyBook.Utility;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +13,25 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options=>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
+//For Email confirmed Account to use option goes to options
+//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
+//Add services for application or user cookie
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = $"/Identity/Account/Login";
+    options.LogoutPath = $"/Identity/Account/Logout";
+    options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+});
+
+//configuratuin for Razor Pages
+builder.Services.AddRazorPages();
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 var app = builder.Build();
 
@@ -26,7 +48,11 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
+
+// for map or routing Razor Pages
+app.MapRazorPages();
 
 app.MapControllerRoute(
     name: "default",
