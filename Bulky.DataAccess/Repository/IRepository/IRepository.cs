@@ -9,8 +9,8 @@ namespace BulkyBook.DataAccess.Repository.IRepository
 {
     public interface IRepository<T> where T : class
     {
-        T Get(Expression<Func<T, bool>> filter, string? includeProperties = null);  // single entity based on a condition
-        IEnumerable<T> GetAll(string? includeProperties = null);  //get all entities
+        IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter= null, string? includeProperties = null);  //get all entities
+        T Get(Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked = false);  // single entity based on a condition and bool for false nontracking
         void Add(T entity);
         void Remove(T entity);
         void RemoveRange(IEnumerable<T> entity);
