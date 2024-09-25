@@ -115,7 +115,7 @@ namespace BulkyBookWeb.Areas.Identity.Pages.Account
             public IEnumerable<SelectListItem> RoleList { get; set; }
             [Required]
             public string Name { get; set; }
-            public string StreetAdress { get; set; }
+            public string StreetAddress { get; set; }
             public string City { get; set; }
             public string State { get; set; }
             public string PostalCode { get; set; }
@@ -163,7 +163,7 @@ namespace BulkyBookWeb.Areas.Identity.Pages.Account
                 var user = CreateUser();
 
                 user.Name = Input.Name;
-                user.StreetAdress = Input.StreetAdress;
+                user.StreetAddress = Input.StreetAddress;
                 user.City = Input.City;
                 user.State = Input.State;
                 user.PostalCode = Input.PostalCode;
