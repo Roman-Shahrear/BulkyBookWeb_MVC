@@ -4,14 +4,17 @@ using BulkyBookWeb.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BulkyBook.DataAcess.Data
 {
     public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     {
+        //private readonly IConfiguration _configuration; IConfiguration configuration  _configuration = configuration;
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext>options) : base(options)
         {
-            
+           
         }
 
         // For map in database
@@ -22,6 +25,7 @@ namespace BulkyBook.DataAcess.Data
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<OrderHeader> OrderHeaders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

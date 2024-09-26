@@ -8,12 +8,29 @@ using BulkyBook.Utility;
 using Microsoft.Extensions.Options;
 using Stripe;
 
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+//,
+//        sqlServerOptionsAction: sqlOptions =>
+//        {
+//            sqlOptions.EnableRetryOnFailure(
+//                maxRetryCount: 10,
+//                maxRetryDelay: TimeSpan.FromSeconds(5),
+//                errorNumbersToAdd: null);
+//        }
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<ApplicationDbContext>(options=>
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+//builder.Services.AddDbContext<ApplicationDbContext>((serviceProvider, options) =>
+//{
+//    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+//    options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+//        sqlOptions => sqlOptions.EnableRetryOnFailure());
+//});
+
 
 
 //Add services for Stripe
@@ -64,5 +81,6 @@ app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
     pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
+
 
 app.Run();

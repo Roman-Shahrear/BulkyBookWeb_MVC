@@ -123,11 +123,11 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
 
 			if (applicationUser.CompanyId.GetValueOrDefault() == 0)
 			{
-				//For regular customer account and also for need to capture payment
-				//Stripe logic
+                //For regular customer account and also for need to capture payment
+                //Stripe logic
 
-				var domain = "https://localhost:7055/";
-				var options = new Stripe.Checkout.SessionCreateOptions
+                var domain = Request.Scheme + "://" + Request.Host.Value + "/";
+                var options = new Stripe.Checkout.SessionCreateOptions
 				{
 					SuccessUrl = domain+$"customer/cart/OrderConfirmation?id={ShoppingCartVM.OrderHeader.Id}",
 					CancelUrl = domain+"customer/cart/index",

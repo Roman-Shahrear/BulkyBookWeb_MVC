@@ -27,7 +27,7 @@ namespace BulkyBook.DataAccess.Repository
             dbSet.Add(entity);
         }
 
-        public T Get(Expression<Func<T, bool>>? filter, string? includeProperties = null, bool tracked = false)
+        public T? Get(Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked = false)
         {
             IQueryable<T> query;
             if (tracked)
@@ -39,7 +39,10 @@ namespace BulkyBook.DataAccess.Repository
                 query = dbSet.AsNoTracking();
             }
 
-            query = query.Where(filter);
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
             if (!string.IsNullOrEmpty(includeProperties))
             {
                 foreach (var includeProp in includeProperties
@@ -54,7 +57,7 @@ namespace BulkyBook.DataAccess.Repository
 
         //Category, CategoryID or CoverType
 
-        public IEnumerable<T> GetAll(Expression<Func<T, bool>> filter, string? includeProperties = null)
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter, string? includeProperties = null)
         {
             IQueryable<T> query = dbSet;
             if(filter != null)
