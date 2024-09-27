@@ -48,6 +48,21 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
 });
 
+builder.Services.AddAuthentication().AddFacebook(option =>
+{
+    option.AppId = "1540889956518522";
+    option.AppSecret = "73ca2784c8b6c4d17277d64b13aa5395";
+});
+
+//Add Session
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(100);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 //configuratuin for Razor Pages
 builder.Services.AddRazorPages();
 
@@ -74,7 +89,7 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseSession();
 // for map or routing Razor Pages
 app.MapRazorPages();
 
