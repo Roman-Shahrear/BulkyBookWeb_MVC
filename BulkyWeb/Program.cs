@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using BulkyBook.Utility;
 using Microsoft.Extensions.Options;
 using Stripe;
+using BulkyBook.DataAccess.DbInitializer;
 
 
 
@@ -63,6 +64,7 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 //configuratuin for Razor Pages
 builder.Services.AddRazorPages();
 
@@ -90,6 +92,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
+SeedDtabase();
 // for map or routing Razor Pages
 app.MapRazorPages();
 
@@ -99,3 +102,12 @@ app.MapControllerRoute(
 
 
 app.Run();
+
+void SeedDtabase()
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+        dbInitializer.Initialize();
+    }
+}
