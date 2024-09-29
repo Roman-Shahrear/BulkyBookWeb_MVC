@@ -3,6 +3,7 @@ using BulkyBook.Models.Models;
 using BulkyBook.Models.ViewModels;
 using BulkyBook.Utility;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Stripe.Checkout;
 using System.Security.Claims;
@@ -14,12 +15,13 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
 	public class CartController : Controller
 	{
 		private readonly IUnitOfWork _unitOfWork;
-
+		private readonly IEmailSender _emailSender;
 		[BindProperty]
 		public ShoppingCartVM ShoppingCartVM { get; set; }
-		public CartController(IUnitOfWork unitOfWork)
+		public CartController(IUnitOfWork unitOfWork, IEmailSender emailSender)
 		{
 			_unitOfWork = unitOfWork;
+			_emailSender = emailSender;
 		}
 
 		public IActionResult Index()
@@ -181,7 +183,18 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
 				HttpContext.Session.Clear();
 			}
 
-			List<ShoppingCart> shoppingCarts = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == orderHeader.ApplicationUserId).ToList();
+            //_emailSender.SendEmailAsync(orderHeader.ApplicationUser.Email, "New Order - Bulky Book", $"<p>New Order Created - {orderHeader.Id}</p>");
+            var emailBody = $"<h1>Thank you for your order!</h1><p>Order ID: {orderHeader.Id}</p><p>Total: ${orderHeader.OrderTotal}</p>";
+            if (ShoppingCartVM?.ShoppingCartList != null)
+            {
+                foreach (var item in ShoppingCartVM.ShoppingCartList)
+                {
+                    emailBody += $"<p>{item.Product.Title} - {item.Count} x ${item.Price}</p>";
+                }
+            }
+            _emailSender.SendEmailAsync(orderHeader.ApplicationUser.Email, "New Order - Bulky Book", emailBody);
+
+            List<ShoppingCart> shoppingCarts = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == orderHeader.ApplicationUserId).ToList();
 			_unitOfWork.ShoppingCart.RemoveRange(shoppingCarts);
 			_unitOfWork.Save();
 			return View(id);

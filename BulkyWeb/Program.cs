@@ -13,26 +13,9 @@ using BulkyBook.DataAccess.DbInitializer;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-//,
-//        sqlServerOptionsAction: sqlOptions =>
-//        {
-//            sqlOptions.EnableRetryOnFailure(
-//                maxRetryCount: 10,
-//                maxRetryDelay: TimeSpan.FromSeconds(5),
-//                errorNumbersToAdd: null);
-//        }
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-//builder.Services.AddDbContext<ApplicationDbContext>((serviceProvider, options) =>
-//{
-//    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-//    options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
-//        sqlOptions => sqlOptions.EnableRetryOnFailure());
-//});
-
-
 
 //Add services for Stripe
 builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
@@ -49,10 +32,11 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
 });
 
-builder.Services.AddAuthentication().AddFacebook(option =>
+
+builder.Services.AddAuthentication().AddFacebook(options =>
 {
-    option.AppId = "1540889956518522";
-    option.AppSecret = "73ca2784c8b6c4d17277d64b13aa5395";
+    options.AppId = builder.Configuration["Authentication:Facebook:AppId"];
+    options.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"];
 });
 
 //Add Session
