@@ -30,12 +30,6 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
 
         public IActionResult Details(int productId)
         {
-            //when work on only product then we have to use this
-            //Product product = _unitOfWork.Product.Get(u=> u.Id== productId, includeProperties: "Category");
-            //product.Count = 1; // default value for Count
-            //return View(product);
-
-            //For populate ShoppingCart
             ShoppingCart cart = new()
             {
                 Product = _unitOfWork.Product.Get(u => u.Id == productId, includeProperties: "Category,ProductImages"),

@@ -3,10 +3,10 @@ using BulkyBook.Models.Models;
 using BulkyBook.Utility;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BulkyBook.DataAccess.DbInitializer
@@ -16,54 +16,88 @@ namespace BulkyBook.DataAccess.DbInitializer
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ApplicationDbContext _db;
-        
+        private readonly ILogger<DbInitializer> _logger;
+
         public DbInitializer(
             UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager,
-            ApplicationDbContext db)
+            ApplicationDbContext db,
+            ILogger<DbInitializer> logger)
         {
             _roleManager = roleManager;
             _userManager = userManager;
             _db = db;
+            _logger = logger;
         }
+
         public void Initialize()
         {
-            //migrations if they are not applied
+            // Apply any pending migrations
             try
             {
                 if (_db.Database.GetPendingMigrations().Count() > 0)
                 {
                     _db.Database.Migrate();
+                    _logger.LogInformation("Database migrations applied successfully.");
                 }
             }
-            catch (Exception ex) { }
-
-
-            if (!_roleManager.RoleExistsAsync(SD.Role_Customer).GetAwaiter().GetResult())
+            catch (Exception ex)
             {
-                _roleManager.CreateAsync(new IdentityRole(SD.Role_Customer)).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole(SD.Role_Employee)).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole(SD.Role_Admin)).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole(SD.Role_Company)).GetAwaiter().GetResult();
+                _logger.LogError($"Migration error: {ex.Message}");
+            }
 
+            // Create roles if they don't exist
+            var roles = new List<string>
+            {
+                SD.Role_Customer,
+                SD.Role_Employee,
+                SD.Role_Admin,
+                SD.Role_Company
+            };
 
-                //if roles are not created, then we will create admin user as well
-                _userManager.CreateAsync(new ApplicationUser
+            foreach (var role in roles)
+            {
+                if (!_roleManager.RoleExistsAsync(role).GetAwaiter().GetResult())
                 {
-                    UserName = "admin@gmail.com",
-                    Email = "admin@gmail.com",
-                    Name = "Admin",
+                    var result = _roleManager.CreateAsync(new IdentityRole(role)).GetAwaiter().GetResult();
+                    if (result.Succeeded)
+                    {
+                        _logger.LogInformation($"Role '{role}' created successfully.");
+                    }
+                    else
+                    {
+                        _logger.LogError($"Error creating role '{role}': {string.Join(", ", result.Errors.Select(e => e.Description))}");
+                    }
+                }
+            }
+
+            // Create admin user if not exists
+            var adminEmail = "admin@gmail.com";
+            if (_userManager.FindByEmailAsync(adminEmail).GetAwaiter().GetResult() == null)
+            {
+                var adminUser = new ApplicationUser
+                {
+                    UserName = adminEmail,
+                    Email = adminEmail,
+                    Name = "Roman Shahrear",
                     PhoneNumber = "01786175147",
-                    StreetAddress = "Amlapara Lichutala",
+                    StreetAddress = "A/2",
                     State = "Mymenshingh",
                     PostalCode = "2000",
                     City = "Jamalpur"
-                }, "Asp.net123456!").GetAwaiter().GetResult();
+                };
 
-                ApplicationUser user = _db.ApplicationUsers.FirstOrDefault(u => u.Email == "admin@gmail.com");
-                _userManager.AddToRoleAsync(user, SD.Role_Admin).GetAwaiter().GetResult();
+                var createAdminResult = _userManager.CreateAsync(adminUser, "Asp.net123456!").GetAwaiter().GetResult();
+                if (createAdminResult.Succeeded)
+                {
+                    _userManager.AddToRoleAsync(adminUser, SD.Role_Admin).GetAwaiter().GetResult();
+                    _logger.LogInformation($"Admin user '{adminEmail}' created and assigned to role '{SD.Role_Admin}'.");
+                }
+                else
+                {
+                    _logger.LogError($"User creation error for '{adminEmail}': {string.Join(", ", createAdminResult.Errors.Select(e => e.Description))}");
+                }
             }
-            return;
-        }   
+        }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using BulkyBook.Models;
 using BulkyBook.Models.Models;
-using BulkyBookWeb.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

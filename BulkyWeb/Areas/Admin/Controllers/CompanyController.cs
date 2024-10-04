@@ -1,5 +1,4 @@
-﻿using BulkyBook.DataAccess.Migrations;
-using BulkyBook.DataAccess.Repository.IRepository;
+﻿using BulkyBook.DataAccess.Repository.IRepository;
 using BulkyBook.DataAcess.Data;
 //using BulkyBook.Models;
 using BulkyBook.Models.Models;
